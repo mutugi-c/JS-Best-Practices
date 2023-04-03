@@ -70,7 +70,7 @@ const populateTaskList = (arr) => {
 
     toDoItem.dataset.index = taskManager.taskArr.indexOf(task);
   });
-}
+};
 
 // Call function to update completed status
 toggleCompleted(toDoList, taskManager);
