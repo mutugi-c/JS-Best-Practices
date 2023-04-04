@@ -75,7 +75,6 @@ const populateTaskList = (arr) => {
       }
     });
 
-
     toDoItem.dataset.index = taskManager.taskArr.indexOf(task);
   });
 };
