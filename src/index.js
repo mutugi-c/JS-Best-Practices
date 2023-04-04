@@ -33,40 +33,48 @@ const populateTaskList = (arr) => {
       }
     });
 
-    // Change list item behaviour on click
-    toDoItem.addEventListener('click', () => {
-      if (!toDoItem.classList.contains('active')) {
-        // Remove the 'active' class from all other items
-        document.querySelectorAll('.to-do-item').forEach((item) => {
-          item.classList.remove('active');
-          item.querySelector('.fa-ellipsis-v').classList.remove('hide');
-          item.querySelector('.trash-icon').classList.add('hide');
-          item.style.background = '';
-        });
+    toDoList.addEventListener('click', (event) => {
+      const clickedElement = event.target;
 
-        // Add the 'active' class to the latest selected item
-        toDoItem.classList.add('active');
-        toDoItem.querySelector('.fa-ellipsis-v').classList.add('hide');
-        toDoItem.querySelector('.trash-icon').classList.remove('hide');
-        toDoItem.style.background = '#fffbc8';
+      // Find the parent to-do item element
+      const toDoItem = clickedElement.closest('.to-do-item');
 
-        // Focus on the task description element for editing
-        taskDescription.focus();
+      if (toDoItem) {
+        // Change list item behaviour on click
+        if (!toDoItem.classList.contains('active')) {
+          // Remove the 'active' class from all other items
+          document.querySelectorAll('.to-do-item').forEach((item) => {
+            item.classList.remove('active');
+            item.querySelector('.fa-ellipsis-v').classList.remove('hide');
+            item.querySelector('.trash-icon').classList.add('hide');
+            item.style.background = '';
+          });
+
+          // Add the 'active' class to the latest selected item
+          toDoItem.classList.add('active');
+          toDoItem.querySelector('.fa-ellipsis-v').classList.add('hide');
+          toDoItem.querySelector('.trash-icon').classList.remove('hide');
+          toDoItem.style.background = '#fffbc8';
+
+          // Focus on the task description element for editing
+          taskDescription.focus();
+        }
+
+        // Add event listener to trash icon
+        if (clickedElement.classList.contains('trash-icon')) {
+          const index = parseInt(toDoItem.dataset.index, 10);
+          taskManager.removeTask(index);
+          toDoItem.remove();
+        }
+
+        // Add event listener to check-button
+        if (clickedElement.classList.contains('check-button')) {
+          const index = parseInt(toDoItem.dataset.index, 10);
+          toggleCompleted(toDoList, taskManager, index);
+        }
       }
     });
 
-    // Add event listener to trash icon
-    toDoItem.querySelector('.trash-icon').addEventListener('click', () => {
-      taskManager.removeTask(task.index);
-      toDoItem.remove();
-    });
-
-    // Add event listener to check-button
-    const checkButton = toDoItem.querySelector('.check-button');
-    checkButton.addEventListener('click', () => {
-      const index = parseInt(toDoItem.dataset.index, 10);
-      toggleCompleted(toDoList, taskManager, index);
-    });
 
     toDoItem.dataset.index = taskManager.taskArr.indexOf(task);
   });
